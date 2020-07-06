@@ -10,8 +10,8 @@ public class UrlsPUCP {
 
     public static Map<String, String> URLs = new HashMap<String,String>(){
         {
-//            put("Ingenieria Informatica", "https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123410/informatica.pdf");
-            put("Ingenieria Mecatronica", "https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123413/mecatronica.pdf");
+            put("Ingenieria Informatica", "https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123410/informatica.pdf");
+//            put("Ingenieria Mecatronica", "https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123413/mecatronica.pdf");
 //            put("Ingenieria Mecanica","https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123412/mecanica.pdf");
 //            put("Matematicas","https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123411/matematica.pdf");
 //            put("Quimica","https://files.pucp.education/facultad/ingenieria/wp-content/uploads/2020/02/25123415/quimica.pdf"); //Quiza haya errores

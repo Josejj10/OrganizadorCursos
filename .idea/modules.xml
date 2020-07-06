@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/OrganizadorCursosServer.iml" filepath="$PROJECT_DIR$/.idea/OrganizadorCursosServer.iml" />
       <module fileurl="file://$PROJECT_DIR$/cursos-service/cursos-service.iml" filepath="$PROJECT_DIR$/cursos-service/cursos-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/model/model.iml" filepath="$PROJECT_DIR$/model/model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/react-view/react-view.iml" filepath="$PROJECT_DIR$/react-view/react-view.iml" />
     </modules>
   </component>
 </project>
