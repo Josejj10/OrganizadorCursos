@@ -3,18 +3,20 @@ import THEMES from './themes/grommetThemes';
 import Helmet from 'react-helmet';
 import {MainBar} from './components/AppBar.js';
 import {SidebarA} from "./components/SideBar";
+import {ListCursos} from "./screens/ListCursos";
+import {OverviewCiclos} from "./screens/OverviewCiclos";
 import {
     Box,
     Grommet,
     ResponsiveContext
 } from 'grommet';
-import {OverviewCiclos} from "./screens/OverviewCiclos";
 
 function App() {
     const [themeName, setTName] = useState('theme');
     const [showSideBar, setShowSideBar] = useState(false);
     const [dmActivo, setDmActivo] = useState(false);
-    function setThemeName(str){
+
+    function setThemeName(str) {
         setTName(str);
         setDmActivo(str.includes("dark"));
     }
@@ -30,13 +32,21 @@ function App() {
             </Helmet>
             <ResponsiveContext.Consumer>
                 {size => (
-                    <Box fill background='back'>
+                    <Box>
                         <MainBar setShowSideBar={setShowSideBar} showSideBar={showSideBar}
-                                 setThemeName={setThemeName} dmActivo = {dmActivo}/>
-                        <Box direction='row' flex overflow={{horizontal: 'hidden'}}>
-                            <OverviewCiclos/>
+                                 setThemeName={setThemeName} dmActivo={dmActivo}/>
+                        <Box
+                            direction='row'
+                            flex
+                            overflow={{horizontal: 'hidden'}}
+                            fill
+                            background='back'
+                        >
+                            <Box fill flex>
+                                <ListCursos/>
+                            </Box>
                             <SidebarA showSideBar={showSideBar} setShowSideBar={setShowSideBar}
-                                      setThemeName={setThemeName} dmActivo={dmActivo} size = {size}/>
+                                      setThemeName={setThemeName} dmActivo={dmActivo} size={size}/>
                         </Box>
                     </Box>
                 )}

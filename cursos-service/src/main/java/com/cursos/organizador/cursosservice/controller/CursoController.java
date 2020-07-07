@@ -1,6 +1,7 @@
 package com.cursos.organizador.cursosservice.controller;
 
 import com.cursos.organizador.cursosservice.dto.CursoDTO;
+import com.cursos.organizador.cursosservice.dto.CursoListaDTO;
 import com.cursos.organizador.cursosservice.dto.CursoModelAssembler;
 import com.cursos.organizador.cursosservice.services.LectorUrlsService;
 import com.cursos.organizador.model.model.Carrera;
@@ -21,7 +22,7 @@ import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
 @RequestMapping("/cursos")
 @ComponentScan({"com.cursos.organizador.cursosservice.controller"})
@@ -39,18 +40,15 @@ public class CursoController {
     private final LectorUrlsService lectorUrls;
     private final CursoModelAssembler cursoModelAssembler;
 
-    @GetMapping
-    public CollectionModel<EntityModel<CursoDTO>> list() {
-       return cursoModelAssembler.toCollectionModel(cursoRepository.findAll());
-    }
-
-    //@GetMapping
-//    public List<CursoDTO> list(){
-//        List<CursoDTO> cursos = new ArrayList<>();
-//        for(Curso c :cursoRepository.findAll())
-//            cursos.add(new CursoDTO(c));
-//        return cursos;
+//    @GetMapping
+//    public CollectionModel<EntityModel<CursoDTO>> list() {
+//       return cursoModelAssembler.toCollectionModel(cursoRepository.findAll());
 //    }
+
+    @GetMapping
+    public CollectionModel<EntityModel<CursoListaDTO>> list() {
+       return cursoModelAssembler.toCollectionModelLista(cursoRepository.findAll());
+    }
 
     @GetMapping("/{id}")
     public EntityModel<CursoDTO> getCurso(@PathVariable("id") Long id) throws ResourceNotFoundException {
@@ -58,13 +56,6 @@ public class CursoController {
         new ResourceNotFoundException("No se hallo el Curso "+id));
         return cursoModelAssembler.toModel(c);
     }
-//
-//    @GetMapping("/{id}")
-//    public CursoDTO getCurso(@PathVariable("id") Long id) throws ResourceNotFoundException {
-//        Curso c = cursoRepository.findById(id).orElseThrow(()->
-//        new ResourceNotFoundException("No se hallo el Curso "+id));
-//        return new CursoDTO(c);
-//    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -81,11 +72,6 @@ public class CursoController {
                 .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
-
-//    @PostMapping
-//    public Curso crearCurso(@Valid @RequestBody Curso curso){
-//        return cursoRepository.save(curso);
-//    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCurso(@PathVariable(value = "id") Long id,
@@ -115,27 +101,6 @@ public class CursoController {
                 body(entityModel);
     }
 
-//    @PutMapping("/{id}")
-//    public Curso updateCurso(@PathVariable(value = "id") Long id,
-//                                             @Valid @RequestBody Curso curso)
-//            throws ResourceNotFoundException {
-//
-//        Curso c = cursoRepository.findById(id).orElseThrow(()->
-//        new ResourceNotFoundException("No se hallo el Curso "+id));
-//        c.setNombre(curso.getNombre());
-//        c.setCode(curso.getCode());
-//        c.setCreditos(curso.getCreditos());
-//        c.setHorario(curso.getHorario());
-//        c.setProf(curso.getProf());
-//        c.setLinks(curso.getLinks());
-//        c.setRequisitos(curso.getRequisitos());
-//        c.setRequeridoPor(curso.getRequeridoPor());
-//        c.setCiclo(curso.getCiclo());
-//        c.setMinCreditos(curso.getMinCreditos());
-//        c.setAbreviatura(curso.getAbreviatura());
-//        return cursoRepository.save(c);
-//    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCurso(@PathVariable(value="id") Long id)
             throws ResourceNotFoundException {
@@ -145,17 +110,17 @@ public class CursoController {
 
 
     @GetMapping("/{id}/requisitos")
-    public List<Curso> getRequisitos(@PathVariable("id") Long id) throws ResourceNotFoundException{
+    public CollectionModel<EntityModel<CursoDTO>> getRequisitos(@PathVariable("id") Long id) throws ResourceNotFoundException{
         Curso c = cursoRepository.findById(id).orElseThrow(()->
                 new ResourceNotFoundException("No se hallo el Curso "+id));
-        return c.getAllRequisitos();
+        return cursoModelAssembler.toCollectionModel(c.getAllRequisitos());
     }
 
     @GetMapping("/{id}/requeridoPor")
-    public List<Curso> getRequeridoPor(@PathVariable("id") Long id) throws ResourceNotFoundException{
+    public CollectionModel<EntityModel<CursoDTO>> getRequeridoPor(@PathVariable("id") Long id) throws ResourceNotFoundException{
         Curso c = cursoRepository.findById(id).orElseThrow(()->
                 new ResourceNotFoundException("No se hallo el Curso "+id));
-        return c.getAllRequeridoPor();
+        return cursoModelAssembler.toCollectionModel(c.getAllRequeridoPor());
     }
 
     @GetMapping("/{id}/tieneReq")

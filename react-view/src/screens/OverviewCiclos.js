@@ -1,7 +1,6 @@
 import React from "react";
 import {Box} from "grommet";
 
-
 export class OverviewCiclos extends React.Component{
     constructor(props) {
         super(props);

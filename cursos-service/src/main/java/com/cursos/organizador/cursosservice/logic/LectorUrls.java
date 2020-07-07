@@ -78,6 +78,9 @@ public class LectorUrls {
             }}.getText(doc);
             doc.close();
             bis.close();
+
+            System.out.println("\nObligatorios:\n"+ obligatorios);
+            System.out.println("\nElectivos:\n"+ electivos);
             leerCursos(obligatorios,carrera, true);
             leerCursos(electivos,carrera, false);
             carreras.add(carrera);
@@ -276,15 +279,18 @@ public class LectorUrls {
 
         // Verificar si hay un numero de ciclo al comienzo
         linea = leerCiclo(linea, c);
+
         // Leer codigo -> Primeros 6 caracteres
         curso = buscarCurso(linea.substring(0, 6));
         curso.setCiclo(c.intValue());
+
         return leerCursoR(lineaInicio, linea, curso);
     }
 
     private static String extraerNombre(String linea, Curso curso){
         String aux;
         String regex = "(?=(?=[^\\.])[^\\d])[^\\s]";
+
         int intAux;
 
         // Nombre del curso

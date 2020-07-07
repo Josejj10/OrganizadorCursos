@@ -30,9 +30,28 @@ public class CursoModelAssembler implements RepresentationModelAssembler<Curso,
 
     }
 
+
+    public EntityModel<CursoListaDTO> toModelList(Curso curso){
+        try {
+            return EntityModel.of(new CursoListaDTO(curso),
+                    linkTo(methodOn(CursoController.class).getCurso(curso.getId())).withSelfRel(),
+                    linkTo(methodOn(CursoController.class).list()).withRel("cursos"));
+        } catch (ResourceNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
     public CollectionModel<EntityModel<CursoDTO>> toCollectionModel(List<Curso> cursos) {
        return CollectionModel.of(cursos.stream().map(
                 this::toModel).collect(Collectors.toList()),
+                linkTo(methodOn(CursoController.class).list()).withSelfRel());
+    }
+
+    public CollectionModel<EntityModel<CursoListaDTO>> toCollectionModelLista(List<Curso> cursos) {
+       return CollectionModel.of(cursos.stream().map(
+                this::toModelList).collect(Collectors.toList()),
                 linkTo(methodOn(CursoController.class).list()).withSelfRel());
     }
 }

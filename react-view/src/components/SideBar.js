@@ -1,5 +1,5 @@
 import React from "react";
-import {Box, Button, Collapsible, Layer} from "grommet";
+import {Box, Button, Collapsible, Heading, Layer} from "grommet";
 import {FormClose } from "grommet-icons";
 import { Sun } from 'react-feather';
 
@@ -14,20 +14,23 @@ export class SmallSidebar extends React.Component {
     render() {
         return (
             <Collapsible direction='horizontal' open={this.props.showSideBar}>
-                <Box flex
-                     elevation= {this.props.dmActivo? 'none' :'medium'}
+                <Box
+                    flex
+                    elevation= {this.props.dmActivo? 'none' :'medium'}
+                    background='secondary'
                 >
                     <Box
                         flex
                         width='small'
-                        background='secondary'
+                        // background='secondary'
                         align='center'
                         justify='center'
 
                     >
+                        <Heading>1</Heading>
                     </Box>
                     <Box
-                        background='secondary'
+                        // background='secondary'
                         tag='footer'
                         align='center'
                         justify='end'
