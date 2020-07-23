@@ -1,5 +1,6 @@
 package com.cursos.organizador.model.model;
 
+import com.cursos.organizador.model.model.enums.ETipoRequisito;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
@@ -16,29 +17,22 @@ public class Curso implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
+    private String code;
     private String nombre;
     private double creditos;
     private int minCreditos;
-    private String code;
-    private String abreviatura;
-    private int ciclo;
-    private String prof;
-    private String horario;
-    @ElementCollection
-    private List<String> carreras;
-    @ElementCollection
-    private List<String> links;
-    //@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    //private Formula formula;
-    // Requisitos para llevar el curso
-    // Curso requiere
+    private String unidadAcademica;
+    private String ultimoCicloDictado; // "Vigente"
+    private String linkCurso;
+
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<CursoPlanDeEstudios> planes;
+
     @OneToMany(mappedBy = "requiere", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("apuntes")
     private List<CursoRequisito> requisitos;
 
     // Curso es requisito de
     @OneToMany(mappedBy = "requerido", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("apuntes")
     private List<CursoRequisito> requeridoPor;
 
     /*=============================
@@ -46,20 +40,26 @@ public class Curso implements Serializable {
      *=============================*/
 
     public Curso() {
-        links = new ArrayList<>();
-//        apuntes = new ArrayList<>();
+        nombre = "Por definir";
+        code = "AAA111";
+        creditos = minCreditos = 0;
+        unidadAcademica = "Por definir";
+        ultimoCicloDictado = "Vigente";
+        linkCurso = "Por definir";
         requeridoPor = new ArrayList<>();
         requisitos = new ArrayList<>();
-//        formula = new Formula();
-        carreras = new ArrayList<>();
+        planes = new ArrayList<>();
     }
     public Curso(Long id) {
-        links = new ArrayList<>();
-//        apuntes = new ArrayList<>();
+        nombre = "Por definir";
+        code = "AAA111";
+        creditos = minCreditos = 0;
+        unidadAcademica = "Por definir";
+        ultimoCicloDictado = "Vigente";
+        linkCurso = "Por definir";
         requeridoPor = new ArrayList<>();
         requisitos = new ArrayList<>();
-//        formula = new Formula();
-        carreras = new ArrayList<>();
+        planes = new ArrayList<>();
         this.id = id;
     }
 
@@ -79,54 +79,12 @@ public class Curso implements Serializable {
         this.nombre = nombre;
     }
 
-//    public void addApunte(Apunte a) {
-//        apuntes.add(a);
-//        a.setCurso(this);
-//    }
-//
-//    public void eliminarApunte(Apunte a) {
-//        if (apuntes.remove(a))
-//            a.setCurso(null);
-//    }
-
-//    public List<Apunte> getApuntes() {
-//        return apuntes;
-//    }
-//
-//    public void setApuntes(List<Apunte> apuntes) {
-//        this.apuntes = apuntes;
-//    }
-//
-//    public Formula getFormula() {
-//        return formula;
-//    }
-//
-//    public void setFormula(Formula formula) {
-//        this.formula = formula;
-//    }
-
-    public List<String> getLinks() {
-        return links;
-    }
-
-    public void setLinks(List<String> links) {
-        this.links = links;
-    }
-
     public double getCreditos() {
         return creditos;
     }
 
     public void setCreditos(double creditos) {
         this.creditos = creditos;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
     }
 
     public String getCode() {
@@ -137,20 +95,12 @@ public class Curso implements Serializable {
         this.code = code;
     }
 
-    public String getProf() {
-        return prof;
+    public String getUltimoCicloDictado() {
+        return ultimoCicloDictado;
     }
 
-    public void setProf(String prof) {
-        this.prof = prof;
-    }
-
-    public int getCiclo() {
-        return ciclo;
-    }
-
-    public void setCiclo(int ciclo) {
-        this.ciclo = ciclo;
+    public void setUltimoCicloDictado(String prof) {
+        this.ultimoCicloDictado = prof;
     }
 
     public int getMinCreditos() {
@@ -161,35 +111,35 @@ public class Curso implements Serializable {
         this.minCreditos = minCreditos;
     }
 
-    public String getAbreviatura() {
-        return abreviatura;
+    public String getLinkCurso() {
+        return linkCurso;
     }
 
-    public void setAbreviatura(String abreviatura) {
-        this.abreviatura = abreviatura;
+    public void setLinkCurso(String linkCurso) {
+        this.linkCurso = linkCurso;
     }
 
-    public List<String> getCarreras() {
-        return carreras;
+    public List<CursoPlanDeEstudios> getPlanes() {
+        return planes;
     }
 
-    public void setCarreras(List<String> carreras) {
-        this.carreras = carreras;
+    public void setPlanes(List<CursoPlanDeEstudios> planes) {
+        this.planes = planes;
     }
 
-    public void addCarrera(String carrera){
-        carreras.add(carrera);
+    public String getUnidadAcademica() {
+        return unidadAcademica;
     }
 
-    public void removeCarrera(String carrera){
-        carreras.remove(carrera);
+    public void setUnidadAcademica(String abreviatura) {
+        this.unidadAcademica = abreviatura;
     }
 
     public List<CursoRequisito> getRequisitos() {
         return requisitos;
     }
 
-    public List<Curso> getRequisitosCurso(int tipoRequisito){
+    public List<Curso> getRequisitosCurso(ETipoRequisito tipoRequisito){
         List<Curso> cursos = new ArrayList<>();
         for(CursoRequisito cr : requisitos){
             if(cr.getTipoRequisito() == tipoRequisito)
@@ -198,7 +148,7 @@ public class Curso implements Serializable {
         return cursos;
     }
 
-    public List<Curso> getRequeridoPorCurso(int tipoRequisito){
+    public List<Curso> getRequeridoPorCurso(ETipoRequisito tipoRequisito){
         List<Curso> cursos = new ArrayList<>();
         for(CursoRequisito cr : requeridoPor){
             if(cr.getTipoRequisito() == tipoRequisito)
@@ -215,8 +165,6 @@ public class Curso implements Serializable {
         return cursos;
     }
 
-
-
     public List<Curso> getAllRequeridoPor(){
         List<Curso> cursos = new ArrayList<>();
         for(CursoRequisito cr : requeridoPor){
@@ -224,7 +172,6 @@ public class Curso implements Serializable {
         }
         return cursos;
     }
-
 
     public void setRequisitos(List<CursoRequisito> requisitos) {
         this.requisitos = requisitos;
@@ -238,9 +185,9 @@ public class Curso implements Serializable {
         this.requeridoPor = requeridoPor;
     }
 
-    public boolean addRequisito(Curso curso, int tipoRequisito){
+    public boolean addRequisito(Curso curso, ETipoRequisito tipoRequisito){
         for(CursoRequisito req : requisitos){
-            if(req.getRequiere().getCode().equals(curso.getCode()))
+            if(req.getRequerido().getCode().equals(curso.getCode()))
                 return false;
         }
 
@@ -250,9 +197,9 @@ public class Curso implements Serializable {
         return true;
     }
 
-    public boolean addRequeridoPor(Curso curso, int tipoRequisito){
+    public boolean addRequeridoPor(Curso curso, ETipoRequisito tipoRequisito){
         for(CursoRequisito req : requeridoPor){
-            if(req.getRequerido().getCode().equals(curso.getCode()))
+            if(req.getRequiere().getCode().equals(curso.getCode()))
                 return false;
         }
         CursoRequisito c = new CursoRequisito(curso,this,tipoRequisito);
@@ -313,13 +260,13 @@ public class Curso implements Serializable {
         curso.removeRequisito(this);
     }
 
-    public int getTipoReq(Curso curso){
+    public ETipoRequisito getTipoReq(Curso curso){
         List<Curso> cursos = new ArrayList<>();
         for(CursoRequisito cr : requisitos){
-            if(cr.getRequiere().getId() == curso.getId())
+            if(cr.getRequiere().getId().equals(curso.getId()))
                 return cr.getTipoRequisito();
         }
-        return -1;
+        return ETipoRequisito.Ninguno;
     }
 
     @Override
@@ -327,26 +274,25 @@ public class Curso implements Serializable {
         String c ="";
         c += "==========================================="+"\n";
         c+= code+": "+nombre+"\n";
-        c+="Ciclo " + ciclo+"\n";
         c+="Creditos: "+ creditos+"\n";
         List<Curso> list;
-        if((list = getRequisitosCurso(0)).size()>0) {
+        if((list = getRequisitosCurso(ETipoRequisito.HaberAprobado)).size()>0) {
             c+="Requisitos:"+"\n";
             for(Curso cur : list)
                 c+="\t"+cur.getCode() + ": " +cur.getNombre()+"\n";
         }
-        if((list =getRequisitosCurso(1)).size()>0) {
-            c += "Requisitos a la vez: " + "\n";
+        if((list =getRequisitosCurso(ETipoRequisito.LlevarSimultaneo)).size()>0) {
+            c += "Requerido llevar a la vez: " + "\n";
             for (Curso cur : list)
                 c += "\t" + cur.getCode() + ": " + cur.getNombre() + "\n";
         }
-        if((list =getRequisitosCurso(2)).size()>0) {
-            c += "Requisitos nota minima 08: " + "\n";
+        if((list =getRequisitosCurso(ETipoRequisito.NotaMinima08)).size()>0) {
+            c += "Requerido tener nota minima 08 en: " + "\n";
             for (Curso cur : list)
                 c += "\t" + cur.getCode() + ": " + cur.getNombre() + "\n";
         }
-        c+="Minimo de Creditos: "+minCreditos+"\n";
+        if(minCreditos != 0)
+            c+="Minimo de Creditos: "+minCreditos+"\n";
         return c;
     }
-
 }

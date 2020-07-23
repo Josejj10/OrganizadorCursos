@@ -1,6 +1,6 @@
 import React from "react";
-import {Box, Button, Heading} from 'grommet';
-import { List} from "grommet-icons";
+import {Box, Button, Heading, Menu} from 'grommet';
+import {Down, List, Radial} from "grommet-icons";
 import {Sun} from "react-feather";
 
 export const AppBar = props => (
@@ -40,7 +40,20 @@ export class MainBar extends React.Component {
                     }}
                     style={{borderRadius: '50%'}}
                 />
-                <Heading textAlign='center' level='2' margin='none'>Cursos Ing. Informática</Heading>
+                <Menu
+                    alignSelf={"center"}
+                    label={<Heading level={2} margin={"none"}>Cursos Ing. Informatica</Heading>}
+                    icon={<Down></Down>}
+                    dropBackground={"brand"}
+                    items={[
+                        { label: <Heading textAlign={"center"} level={3} margin={"none"}>
+                                Planificador de ciclos
+                            </Heading>,
+                            onClick: () => {},
+                        },
+                        // { label: 'Second Action', onClick: () => {} },
+                    ]}
+                />
                 <Button
                     focusIndicator={false}
                     icon={<List/>}

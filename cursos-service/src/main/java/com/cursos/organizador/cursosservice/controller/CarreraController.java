@@ -1,35 +1,43 @@
 package com.cursos.organizador.cursosservice.controller;
 
-import com.cursos.organizador.cursosservice.logic.LectorUrls;
+import com.cursos.organizador.cursosservice.assembler.CarreraAssembler;
+import com.cursos.organizador.cursosservice.dto.CarreraDTO;
 import com.cursos.organizador.cursosservice.repository.CarreraRepository;
+import com.cursos.organizador.cursosservice.repository.PlanDeEstudiosRepository;
 import com.cursos.organizador.model.model.Carrera;
-import com.cursos.organizador.model.model.Curso;
+import com.cursos.organizador.model.model.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/carreras")
 public class CarreraController {
 
     @Autowired
-    private CarreraRepository carreraRepository;
-
-    @GetMapping()
-    public List<Carrera> listar(){
-        return carreraRepository.findAll();
+    public CarreraController(CarreraRepository cr, CarreraAssembler ca, PlanDeEstudiosRepository pde){
+        carreraRepository = cr;
+        carreraAssembler = ca;
+        planDeEstudiosRepository = pde;
     }
 
-//    @PostMapping
-//    public Carrera addCarreraFromUrl(@Valid @RequestBody String url){
-//        Carrera c = new Carrera();
-//        LectorUrls.leerUrl(url, c);
-//        // Agregar los cursos de la carrera
-//
-//        carreraRepository.save(c);
-//        return c;
-//    }
+    // Repository para sacar de la BD
+    private final CarreraRepository carreraRepository;
+    private final PlanDeEstudiosRepository planDeEstudiosRepository;
+    private final CarreraAssembler carreraAssembler;
+
+    @GetMapping()
+    public CollectionModel<EntityModel<CarreraDTO>> list(){
+        return carreraAssembler.toCollectionModelDTO(carreraRepository.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public EntityModel<CarreraDTO> getCarrera(@PathVariable("id") Long id) throws ResourceNotFoundException {
+        Carrera c = carreraRepository.findById(id).orElseThrow(()->
+                new ResourceNotFoundException("No se hallo la carrera" + id));
+        return carreraAssembler.toModelDTO(c);
+    }
 
 }
+

@@ -2,8 +2,7 @@ package com.cursos.organizador.cursosservice.postjson;
 
 import com.cursos.organizador.cursosservice.CursosServiceApplication;
 import com.cursos.organizador.model.model.Curso;
-import com.cursos.organizador.model.model.CursoRequisito;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.cursos.organizador.model.model.enums.ETipoRequisito;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;
@@ -15,16 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import javax.transaction.Transactional;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,9 +45,8 @@ public class CursoAPILiveTest {
         Curso curso = new Curso();
         curso.setCode("ABC123");
         curso.setCreditos(4);
-        curso.setHorario("H123");
         curso.setNombre("LP1");
-        curso.setProf("ProfInsertado1");
+        curso.setUltimoCicloDictado("ProfInsertado1");
         Gson gson = new GsonBuilder().create();
         cursoJsonObject = new JSONObject(gson.toJson(curso));
     }
@@ -90,7 +82,6 @@ public class CursoAPILiveTest {
         int id = 1;
         Curso curso = restTemplate.getForObject(getRootUrl() + "/cursos/"+id,Curso.class);
         curso.setNombre("Técnicas de Programación");
-        curso.setCiclo(4);
         curso.setCreditos(5);
         restTemplate.put(getRootUrl()+"/cursos/"+id,curso);
         curso = restTemplate.getForObject(getRootUrl() + "/cursos/"+id,Curso.class);
@@ -104,7 +95,7 @@ public class CursoAPILiveTest {
         int lp1 = 1;
         Curso lp1Curso =restTemplate.getForObject(getRootUrl()+"/cursos/"+lp1,Curso.class);
         Curso lp2Curso =restTemplate.getForObject(getRootUrl()+"/cursos/"+lp2,Curso.class);
-        lp2Curso.addRequisito(lp1Curso,0);
+        lp2Curso.addRequisito(lp1Curso, ETipoRequisito.LlevarSimultaneo);
         restTemplate.put(getRootUrl()+"/cursos/"+lp2,lp2Curso);
         System.out.println("Agregado1");
         restTemplate.put(getRootUrl()+"/cursos/"+lp1,lp1Curso);

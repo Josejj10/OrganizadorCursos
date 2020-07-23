@@ -2,9 +2,7 @@ package com.cursos.organizador.cursosservice.controller;
 
 import com.cursos.organizador.cursosservice.dto.CursoDTO;
 import com.cursos.organizador.cursosservice.dto.CursoListaDTO;
-import com.cursos.organizador.cursosservice.dto.CursoModelAssembler;
-import com.cursos.organizador.cursosservice.services.LectorUrlsService;
-import com.cursos.organizador.model.model.Carrera;
+import com.cursos.organizador.cursosservice.assembler.CursoModelAssembler;
 import com.cursos.organizador.model.model.exception.ResourceNotFoundException;
 import com.cursos.organizador.cursosservice.repository.CursoRepository;
 import com.cursos.organizador.model.model.Curso;
@@ -15,12 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.hateoas.EntityModel;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.hateoas.CollectionModel;
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
@@ -29,25 +24,25 @@ import java.util.stream.Collectors;
 public class CursoController {
 
     @Autowired
-    public CursoController(CursoRepository cr, LectorUrlsService ls, CursoModelAssembler cma){
+    public CursoController(CursoRepository cr, CursoModelAssembler cma){
         cursoRepository = cr;
-        lectorUrls = ls;
         cursoModelAssembler = cma;
     }
 
     // Repository para sacar los cursos de la BD
     private final CursoRepository cursoRepository;
-    private final LectorUrlsService lectorUrls;
     private final CursoModelAssembler cursoModelAssembler;
-
-//    @GetMapping
-//    public CollectionModel<EntityModel<CursoDTO>> list() {
-//       return cursoModelAssembler.toCollectionModel(cursoRepository.findAll());
-//    }
 
     @GetMapping
     public CollectionModel<EntityModel<CursoListaDTO>> list() {
        return cursoModelAssembler.toCollectionModelLista(cursoRepository.findAll());
+    }
+
+    @GetMapping("carrera/{carrera}")
+    public CollectionModel<EntityModel<CursoListaDTO>> listaPorCarrera(@PathVariable("carrera") String carrera){
+        List<Curso> cursos = cursoRepository.findByCarrera(carrera);
+        System.out.println(cursos);
+        return cursoModelAssembler.toCollectionModelLista(cursos);
     }
 
     @GetMapping("/{id}")
@@ -77,20 +72,18 @@ public class CursoController {
     public ResponseEntity<?> updateCurso(@PathVariable(value = "id") Long id,
                                              @Valid @RequestBody Curso curso)
             throws ResourceNotFoundException {
-
         Curso cur = cursoRepository.findById(id).
                 map( c ->{
-                    c.setNombre(curso.getNombre());
                     c.setCode(curso.getCode());
+                    c.setNombre(curso.getNombre());
                     c.setCreditos(curso.getCreditos());
-                    c.setHorario(curso.getHorario());
-                    c.setProf(curso.getProf());
-                    c.setLinks(curso.getLinks());
+                    c.setMinCreditos(curso.getMinCreditos());
+                    c.setUnidadAcademica(curso.getUnidadAcademica());
+                    c.setUltimoCicloDictado(curso.getUltimoCicloDictado());
+                    c.setLinkCurso(curso.getLinkCurso());
+                    c.setPlanes(curso.getPlanes());
                     c.setRequisitos(curso.getRequisitos());
                     c.setRequeridoPor(curso.getRequeridoPor());
-                    c.setCiclo(curso.getCiclo());
-                    c.setMinCreditos(curso.getMinCreditos());
-                    c.setAbreviatura(curso.getAbreviatura());
                     return cursoRepository.save(c);
                 })
                 .orElseThrow(()->
@@ -123,29 +116,9 @@ public class CursoController {
         return cursoModelAssembler.toCollectionModel(c.getAllRequeridoPor());
     }
 
-    @GetMapping("/{id}/tieneReq")
-    public boolean contieneRequisito(@PathVariable("id") Long id,@Valid @RequestBody Long idReq) throws ResourceNotFoundException{
-        Curso c = cursoRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("No se hallo el curso" +id));
-        for(Curso cr : c.getAllRequisitos())
-            if(cr.getId().equals(idReq))
-                return true;
-        return false;
-    }
-
-    @GetMapping("/{id}/reqPor")
-    public boolean esRequeridoPor(@PathVariable("id") Long id,@Valid @RequestBody Long idReq) throws ResourceNotFoundException{
-        Curso c = cursoRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("No se hallo el curso" +id));
-        for(Curso cr : c.getAllRequeridoPor())
-            if(cr.getId().equals(idReq))
-                return true;
-        return false;
-    }
-
-    @GetMapping("/actualizarCursos")
-    public List<Carrera> actualizarCursos(){
-        return lectorUrls.leer();
-    }
+    //@GetMapping("/actualizarCursos")
+    //public List<Carrera> actualizarCursos(){
+      //  return lectorUrls.leer();
+    //}
 
 }

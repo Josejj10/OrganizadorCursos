@@ -1,8 +1,11 @@
 package com.cursos.organizador.cursosservice.dto;
 
+import com.cursos.organizador.cursosservice.assembler.CarreraAssembler;
+import com.cursos.organizador.cursosservice.assembler.CursoModelAssembler;
 import com.cursos.organizador.model.model.Curso;
-import com.cursos.organizador.model.model.CursoRequisito;
-import com.cursos.organizador.model.model.CursoRequisitoKey;
+import com.cursos.organizador.model.model.PlanDeEstudios;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,47 +13,38 @@ import java.util.List;
 public class CursoDTO {
 
     private Long id;
-    // @ElementCollection
+    private String code;
     private String nombre;
-    private List<String> links;
     private double creditos;
     private int minCreditos;
-    private String code;
-    private String abreviatura;
-    private int ciclo;
-    private String prof;
-    private String horario;
-    //  @ElementCollection
-    private List<String> carreras;
-
-    private List<CursoRequisitoDTO> requisitos;
-    private List<CursoRequisitoDTO> requeridoPor;
+    private String unidadAcademica;
+    private String ultimoCicloDictado; // "Vigente"
+    private String linkCurso;
+    private CollectionModel<EntityModel<PlanDeEstudiosDTO>> planes;
+    private CollectionModel<EntityModel<CursoRequisitoDTO>> requisitos;
+    private CollectionModel<EntityModel<CursoRequisitoDTO>> requeridoPor;
 
     public CursoDTO() {
     }
 
     public CursoDTO(Curso c){
         this.id = c.getId();
-        this.requeridoPor = new ArrayList<>();
-        this.requisitos = new ArrayList<>();
-        this.links = c.getLinks()!=null?c.getLinks(): new ArrayList<>();
         this.creditos = c.getCreditos();
         this.minCreditos = c.getMinCreditos();
         this.code = c.getCode();
         this.nombre = c.getNombre();
-        this.abreviatura=c.getAbreviatura();
-        this.ciclo=c.getCiclo();
-        this.prof=c.getProf();
-        this.carreras=c.getCarreras();
-        this.horario=c.getHorario();
-        if(c.getRequisitos() != null) {
-            for (CursoRequisito cr : c.getRequisitos()) {
-                requisitos.add(new CursoRequisitoDTO(cr));
-            }
+        CursoModelAssembler cma = new CursoModelAssembler();
+        CarreraAssembler ca = new CarreraAssembler();
+        if(c.getPlanes() != null) {
+            List<PlanDeEstudios> _planes = new ArrayList<>();
+            c.getPlanes().stream().forEach(cpde ->
+                    _planes.add(cpde.getPlanDeEstudios()));
+            planes = ca.toCollectionModelPdE(_planes);
         }
-        if(c.getRequeridoPor() == null) return;
-        for(CursoRequisito cr: c.getRequeridoPor())
-            requeridoPor.add(new CursoRequisitoDTO(cr));
+        if(c.getRequisitos() != null)
+            requisitos = cma.toCollectionModelCReq(c.getRequisitos());
+        if(c.getRequeridoPor() != null)
+            requeridoPor = cma.toCollectionModelCReq(c.getRequeridoPor());
     }
 
     public Long getId() {
@@ -59,14 +53,6 @@ public class CursoDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<String> getLinks() {
-        return links;
-    }
-
-    public void setLinks(List<String> links) {
-        this.links = links;
     }
 
     public double getCreditos() {
@@ -101,59 +87,51 @@ public class CursoDTO {
         this.nombre = nombre;
     }
 
-    public String getAbreviatura() {
-        return abreviatura;
-    }
-
-    public void setAbreviatura(String abreviatura) {
-        this.abreviatura = abreviatura;
-    }
-
-    public int getCiclo() {
-        return ciclo;
-    }
-
-    public void setCiclo(int ciclo) {
-        this.ciclo = ciclo;
-    }
-
-    public String getProf() {
-        return prof;
-    }
-
-    public void setProf(String prof) {
-        this.prof = prof;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
-
-    public List<String> getCarreras() {
-        return carreras;
-    }
-
-    public void setCarreras(List<String> carreras) {
-        this.carreras = carreras;
-    }
-
-    public List<CursoRequisitoDTO> getRequisitos() {
+    public CollectionModel<EntityModel<CursoRequisitoDTO>> getRequisitos() {
         return requisitos;
     }
 
-    public void setRequisitos(List<CursoRequisitoDTO> requisitos) {
+    public void setRequisitos(CollectionModel<EntityModel<CursoRequisitoDTO>> requisitos) {
         this.requisitos = requisitos;
     }
 
-    public List<CursoRequisitoDTO> getRequeridoPor() {
+    public CollectionModel<EntityModel<CursoRequisitoDTO>> getRequeridoPor() {
         return requeridoPor;
     }
 
-    public void setRequeridoPor(List<CursoRequisitoDTO> requeridoPor) {
+    public void setRequeridoPor(CollectionModel<EntityModel<CursoRequisitoDTO>> requeridoPor) {
         this.requeridoPor = requeridoPor;
+    }
+
+    public String getUnidadAcademica() {
+        return unidadAcademica;
+    }
+
+    public void setUnidadAcademica(String unidadAcademica) {
+        this.unidadAcademica = unidadAcademica;
+    }
+
+    public String getUltimoCicloDictado() {
+        return ultimoCicloDictado;
+    }
+
+    public void setUltimoCicloDictado(String ultimoCicloDictado) {
+        this.ultimoCicloDictado = ultimoCicloDictado;
+    }
+
+    public String getLinkCurso() {
+        return linkCurso;
+    }
+
+    public void setLinkCurso(String linkCurso) {
+        this.linkCurso = linkCurso;
+    }
+
+    public CollectionModel<EntityModel<PlanDeEstudiosDTO>> getPlanes() {
+        return planes;
+    }
+
+    public void setPlanes(CollectionModel<EntityModel<PlanDeEstudiosDTO>> planes) {
+        this.planes = planes;
     }
 }

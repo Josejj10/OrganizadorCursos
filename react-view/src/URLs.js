@@ -1,0 +1,1 @@
+export const CursosListURL = `http://localhost:8080/cursos`;

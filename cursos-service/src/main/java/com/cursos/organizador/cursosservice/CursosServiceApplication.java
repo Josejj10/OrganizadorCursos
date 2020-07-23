@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@ComponentScan({"com.cursos.organizador.cursosservice.services","com.cursos.organizador.cursosservice.controller", "com.cursos.organizador.cursosservice.dto"})
+@ComponentScan({"com.cursos.organizador.cursosservice.services","com.cursos.organizador.cursosservice.controller",
+        "com.cursos.organizador.cursosservice.dto", "com.cursos.organizador.cursosservice.assembler"})
 @EntityScan(basePackages = "com.cursos.organizador.model.model")
 @EnableJpaRepositories("com.cursos.organizador.cursosservice.repository")
 //@EnableEurekaClient

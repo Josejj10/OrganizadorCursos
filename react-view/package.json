@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "grommet-theme-aruba": "^0.1.2",
-    "grommet-theme-hpe": "^1.0.5"
+    "grommet-theme-hpe": "^1.0.5",
+    "react-csv": "^2.0.3"
   }
 }

@@ -12,7 +12,6 @@ public class CursoListaDTO {
     private Long id;
     private String nombre;
     private String code;
-    private int ciclo;
 
     public CursoListaDTO() {
     }
@@ -21,7 +20,6 @@ public class CursoListaDTO {
         this.id = c.getId();
         this.code = c.getCode();
         this.nombre = c.getNombre();
-        this.ciclo=c.getCiclo();
     }
 
     public Long getId() {
@@ -47,13 +45,4 @@ public class CursoListaDTO {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
-    public int getCiclo() {
-        return ciclo;
-    }
-
-    public void setCiclo(int ciclo) {
-        this.ciclo = ciclo;
-    }
-
 }

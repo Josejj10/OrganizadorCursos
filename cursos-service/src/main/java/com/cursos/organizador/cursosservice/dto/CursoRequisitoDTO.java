@@ -3,6 +3,7 @@ package com.cursos.organizador.cursosservice.dto;
 import com.cursos.organizador.model.model.Curso;
 import com.cursos.organizador.model.model.CursoRequisito;
 import com.cursos.organizador.model.model.CursoRequisitoKey;
+import com.cursos.organizador.model.model.enums.ETipoRequisito;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,7 +15,8 @@ public class CursoRequisitoDTO {
     private String nomRequiere;
     private String codeRequerido;
     private String nomRequerido;
-    private int tipoRequisito; // "Haber pasado", "A la vez", "Nota Minima 08",  0 1 y 2
+    private ETipoRequisito tipoRequisito;
+
 
     public CursoRequisitoDTO() {
     }
@@ -23,10 +25,12 @@ public class CursoRequisitoDTO {
         this.id = cr.getId();
         this.codeRequerido = cr.getRequerido().getCode();
         this.codeRequiere = cr.getRequiere().getCode();
-        this.tipoRequisito = cr.getTipoRequisito();
         this.nomRequerido = cr.getRequerido().getNombre();
         this.nomRequiere = cr.getRequiere().getNombre();
+        this.tipoRequisito = cr.getTipoRequisito();
+
     }
+
 
     public CursoRequisitoKey getId() {
         return id;
@@ -52,11 +56,11 @@ public class CursoRequisitoDTO {
         this.codeRequerido = codeRequerido;
     }
 
-    public int getTipoRequisito() {
+    public ETipoRequisito getTipoRequisito() {
         return tipoRequisito;
     }
 
-    public void setTipoRequisito(int tipoRequisito) {
+    public void setTipoRequisito(ETipoRequisito tipoRequisito) {
         this.tipoRequisito = tipoRequisito;
     }
 

@@ -21,8 +21,6 @@ public class CursoRequisitoKey implements Serializable {
         this.requerido = requerido;
     }
 
-
-
     public Long getRequiere() {
         return requiere;
     }
