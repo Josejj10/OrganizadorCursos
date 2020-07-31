@@ -13,7 +13,7 @@ public class Carrera {
     private String nombre;
     private String linkCarrera;
     private String facultad;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<PlanDeEstudios> planesDeEstudios;
 
     public Carrera(){

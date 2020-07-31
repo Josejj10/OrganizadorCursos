@@ -12,8 +12,7 @@ import {
 } from 'grommet';
 
 function App() {
-    const [themeName, setTName] = useState('theme');
-    const [showSideBar, setShowSideBar] = useState(false);
+    const [themeName, setTName] = useState('regular');
     const [dmActivo, setDmActivo] = useState(false);
 
     function setThemeName(str) {
@@ -22,7 +21,7 @@ function App() {
     }
 
     return (
-        <Grommet theme={THEMES[themeName || 'theme']} full>
+        <Grommet theme={THEMES[themeName || 'regular']} full>
             <Helmet titleTemplate="%s - Organizador" defaultTitle="Cursos">
                 <meta name="description" content="Documentacion"/>
                 <meta
@@ -32,21 +31,20 @@ function App() {
             </Helmet>
             <ResponsiveContext.Consumer>
                 {size => (
-                    <Box>
-                        <MainBar setShowSideBar={setShowSideBar} showSideBar={showSideBar}
-                                 setThemeName={setThemeName} dmActivo={dmActivo}/>
+                    <Box style={{fontFamily:"Heebo", fontSize:"small"}}
+                        background={'back'}
+                    >
+                        <MainBar/>
                         <Box
                             direction='row'
                             flex
                             overflow={{horizontal: 'hidden'}}
                             fill
-                            background='back'
+                            background='error'
                         >
                             <Box fill flex>
                                 <ListCursos/>
                             </Box>
-                            <SidebarA showSideBar={showSideBar} setShowSideBar={setShowSideBar}
-                                      setThemeName={setThemeName} dmActivo={dmActivo} size={size}/>
                         </Box>
                     </Box>
                 )}

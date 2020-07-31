@@ -12,7 +12,7 @@ public class CursoListaDTO {
     private Long id;
     private String nombre;
     private String code;
-
+    private double creditos;
     public CursoListaDTO() {
     }
 
@@ -20,6 +20,7 @@ public class CursoListaDTO {
         this.id = c.getId();
         this.code = c.getCode();
         this.nombre = c.getNombre();
+        this.creditos = c.getCreditos();
     }
 
     public Long getId() {
@@ -44,5 +45,13 @@ public class CursoListaDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public double getCreditos() {
+        return creditos;
+    }
+
+    public void setCreditos(double creditos) {
+        this.creditos = creditos;
     }
 }

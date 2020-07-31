@@ -2,8 +2,9 @@ package com.cursos.organizador.model.model;
 
 import com.cursos.organizador.model.model.enums.ETipoRequisito;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,15 +18,21 @@ public class CursoRequisito implements Serializable {
     @EmbeddedId
     private CursoRequisitoKey id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @MapsId("requiere")
-    @JoinColumn(name = "requiere")
-    private Curso requiere;
+//    @JoinColumns({
+//            @JoinColumn(name = "requiere_curso", referencedColumnName = "curso"),
+//            @JoinColumn(name = "requiere_plan", referencedColumnName = "planDeEstudios")
+//    })
+    private CursoPlanDeEstudios requiere;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @MapsId("requerido")
-    @JoinColumn(name = "requerido")
-    private Curso requerido;
+//    @JoinColumns({
+//            @JoinColumn(name = "requerido_curso", referencedColumnName = "curso"),
+//            @JoinColumn(name = "requerido_plan", referencedColumnName = "planDeEstudios")
+//    })
+    private CursoPlanDeEstudios requerido;
 
     private ETipoRequisito tipoRequisito; // "Haber pasado", "A la vez", "Nota Minima 08",  0 1 y 2
 
@@ -33,7 +40,7 @@ public class CursoRequisito implements Serializable {
         id = new CursoRequisitoKey();
     }
 
-    public CursoRequisito(Curso requiere, Curso requerido, ETipoRequisito tr) {
+    public CursoRequisito(CursoPlanDeEstudios requiere, CursoPlanDeEstudios requerido, ETipoRequisito tr) {
         id = new CursoRequisitoKey();
         this.requiere = requiere;
         this.requerido = requerido;
@@ -48,19 +55,19 @@ public class CursoRequisito implements Serializable {
         this.id = id;
     }
 
-    public Curso getRequiere() {
+    public CursoPlanDeEstudios getRequiere() {
         return requiere;
     }
 
-    public void setRequiere(Curso requiere) {
+    public void setRequiere(CursoPlanDeEstudios requiere) {
         this.requiere = requiere;
     }
 
-    public Curso getRequerido() {
+    public CursoPlanDeEstudios getRequerido() {
         return requerido;
     }
 
-    public void setRequerido(Curso requerido) {
+    public void setRequerido(CursoPlanDeEstudios requerido) {
         this.requerido = requerido;
     }
 
@@ -74,9 +81,10 @@ public class CursoRequisito implements Serializable {
 
     @Override
     public String toString(){
-        return "Requiere: "+requiere.getNombre() +" - " +
-                requiere.getCode() + "\nRequerido: " + requerido.getNombre()+
-                " - " +requerido.getCode();
+        return "Requiere: "+requiere.getCurso().getNombre() +" - " +
+                requiere.getCurso().getCode() + "\nRequerido: " +
+                requerido.getCurso().getNombre()+
+                " - " +requerido.getCurso().getCode();
     }
 
 }

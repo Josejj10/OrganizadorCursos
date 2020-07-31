@@ -48,4 +48,19 @@ public class PlanDeEstudiosController {
         List<PlanDeEstudios> planes = planDeEstudiosRepository.findByCarrera(carrera);
         return carreraAssembler.toCollectionModelPdE(planes);
     }
+
+
+    // @PostMapping()
+    public void actualizarPlanEstudios(){
+        // https://stackoverflow.com/questions/51756899/passing-a-csv-file-to-springboot-java-server
+        // https://stackoverflow.com/questions/24339990/how-to-convert-a-multipart-file-to-file
+        //https://stackoverflow.com/questions/33143743/read-data-from-multipartfile-which-has-csv-uploaded-from-browser
+//    MultipartFile n;
+//        try {
+//        Reader r = new BufferedReader(new InputStreamReader(n.getInputStream()));
+//    }
+//        catch(Exception e){}
+    }
+
+
 }

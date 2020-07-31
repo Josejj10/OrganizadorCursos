@@ -23,10 +23,10 @@ public class CursoRequisitoDTO {
 
     public CursoRequisitoDTO(CursoRequisito cr){
         this.id = cr.getId();
-        this.codeRequerido = cr.getRequerido().getCode();
-        this.codeRequiere = cr.getRequiere().getCode();
-        this.nomRequerido = cr.getRequerido().getNombre();
-        this.nomRequiere = cr.getRequiere().getNombre();
+        this.codeRequerido = cr.getRequerido().getCurso().getCode();
+        this.codeRequiere = cr.getRequiere().getCurso().getCode();
+        this.nomRequerido = cr.getRequerido().getCurso().getNombre();
+        this.nomRequiere = cr.getRequiere().getCurso().getNombre();
         this.tipoRequisito = cr.getTipoRequisito();
 
     }

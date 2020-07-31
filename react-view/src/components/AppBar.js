@@ -1,6 +1,6 @@
 import React from "react";
-import {Box, Button, Heading, Menu} from 'grommet';
-import {Down, List, Radial} from "grommet-icons";
+import {Box, Button, Heading, Menu, Text} from 'grommet';
+import {Down, List, Organization, Radial} from "grommet-icons";
 import {Sun} from "react-feather";
 
 export const AppBar = props => (
@@ -8,12 +8,9 @@ export const AppBar = props => (
     tag = 'header'
     direction='row'
     align='center'
-    justify='between'
-    background= 'brand'
-    pad={{ left: 'medium', right: 'small', vertical: 'small' }}
-    elevation= {props.dmActivo? 'none' :'medium'}
-    style={{ zIndex: '1'
-      }}
+    background= 'transp10'
+    pad={{ left: 'medium', right: 'small', vertical: 'none' }}
+
     {...props}
   />
 );
@@ -21,48 +18,54 @@ export const AppBar = props => (
 export class MainBar extends React.Component {
     constructor(props) {
         super(props);
-        this.setShowSideBar = () => {
-            this.props.setShowSideBar(!this.props.showSideBar);
-        }
         this.setThemeName = () => {
             this.props.setThemeName(!this.props.dmActivo ? "darkTheme" : "theme");
         };
     }
 
     render() {
-        return (<AppBar dmActivo = {this.props.dmActivo}>
-                <Button
-                    focusIndicator={false}
-                    icon={<Sun color={this.props.dmActivo ? 'orange' : 'black'}/>}
-                    onClick={this.setThemeName}
-                    hoverIndicator={{
-                        color: "btnHover", opacity: "1"
-                    }}
-                    style={{borderRadius: '50%'}}
-                />
-                <Menu
-                    alignSelf={"center"}
-                    label={<Heading level={2} margin={"none"}>Cursos Ing. Informatica</Heading>}
-                    icon={<Down></Down>}
-                    dropBackground={"brand"}
-                    items={[
-                        { label: <Heading textAlign={"center"} level={3} margin={"none"}>
-                                Planificador de ciclos
-                            </Heading>,
-                            onClick: () => {},
-                        },
-                        // { label: 'Second Action', onClick: () => {} },
-                    ]}
-                />
-                <Button
-                    focusIndicator={false}
-                    icon={<List/>}
-                    onClick={this.setShowSideBar}
-                    hoverIndicator={{
-                        color: "btnHover", opacity: "1"
-                    }}
-                    style={{borderRadius: '50%'}}
-                />
+        return (<AppBar>
+                <Box direction={"row"} margin={"none"}>
+                    <Button
+                        // TODO onClick =  this.irPaginaPrincipal
+                    >
+                        {/*Logo*/}
+                        <Organization color={'orange'} style={{verticalAlign: "middle"}}/>
+                        <Text weight={"bold"} style={{verticalAlign: "middle"}}>PUCPganizer</Text>
+                    </Button>
+                    {/*Cambiar color Mode*/}
+                    <Button
+                        focusIndicator={false} margin={{left: "small"}}
+                        icon={<Sun color={this.props.dmActivo ? 'orange' : 'grey'}/>}
+                        onClick={this.setThemeName}
+                        hoverIndicator={{
+                            color: "btnHover", opacity: "1"
+                        }}
+                        style={{borderRadius: '50%'}}
+                    />
+                </Box>
+                <Box
+                    flex direction='row' align={"center"} justify={"center"}>
+                    {/*Items del menu*/}
+                    <Button style={{padding:"7px"}}>
+                        idk something maybe</Button>
+                    <Button style={{padding:"7px"}}>
+                    about</Button>
+                    <Button style={{ padding:"7px"}}>
+                        sugerencias</Button>
+                </Box>
+
+                <Box direction={"row"} pad={"none"}>
+                    {/*Cambiar color, ver cursos y Organizar*/}
+                    <Button style={{fontWeight: "bold"}}>ver cursos</Button>
+                    <Button margin={"small"} label={"Organizar →"} size={"small"}
+                            style={{ border:"none",
+                                background: '#E95656', borderRadius: '32px',
+                                color: "#FEFBF8", padding: "5px 15px 5px 15px",
+                                fontWeight: "bold"
+                            }}
+                    />
+                </Box>
             </AppBar>
         );
     }

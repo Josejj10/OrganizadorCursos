@@ -16,11 +16,6 @@ public class CursoRequisitoKey implements Serializable {
     public CursoRequisitoKey() {
     }
 
-    public CursoRequisitoKey(Long requiere, Long requerido) {
-        this.requiere = requiere;
-        this.requerido = requerido;
-    }
-
     public Long getRequiere() {
         return requiere;
     }
@@ -49,5 +44,13 @@ public class CursoRequisitoKey implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(requiere, requerido);
+    }
+
+    @Override
+    public String toString() {
+        return "CursoRequisitoKey{" +
+                "requiere=" + requiere +
+                ", requerido=" + requerido +
+                '}';
     }
 }

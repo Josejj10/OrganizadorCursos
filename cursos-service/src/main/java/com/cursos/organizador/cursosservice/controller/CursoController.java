@@ -3,11 +3,15 @@ package com.cursos.organizador.cursosservice.controller;
 import com.cursos.organizador.cursosservice.dto.CursoDTO;
 import com.cursos.organizador.cursosservice.dto.CursoListaDTO;
 import com.cursos.organizador.cursosservice.assembler.CursoModelAssembler;
+import com.cursos.organizador.cursosservice.services.LectorCSVService;
 import com.cursos.organizador.model.model.exception.ResourceNotFoundException;
 import com.cursos.organizador.cursosservice.repository.CursoRepository;
 import com.cursos.organizador.model.model.Curso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +23,7 @@ import java.util.*;
 
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
-@RequestMapping("/cursos")
+@RequestMapping("/cursosBase")
 @ComponentScan({"com.cursos.organizador.cursosservice.controller"})
 public class CursoController {
 
@@ -36,6 +40,20 @@ public class CursoController {
     @GetMapping
     public CollectionModel<EntityModel<CursoListaDTO>> list() {
        return cursoModelAssembler.toCollectionModelLista(cursoRepository.findAll());
+    }
+
+    @GetMapping("page/{page}/{size}")
+    public CollectionModel<EntityModel<CursoListaDTO>> listPage(
+            @PathVariable("page") int page, @PathVariable("size") int size){
+        // Page -1 porque comienza desde 0 y el cliente pedira desde pagina 1
+        Page<Curso> pg=  cursoRepository.findAll(PageRequest.of(page-1,size));
+        return cursoModelAssembler.toCollectionModelLista(pg.getContent());
+    }
+
+    @GetMapping("numPages/{size}")
+    public int numPages(@PathVariable("size") int size){
+        Page<Curso> pg = cursoRepository.findAll(PageRequest.of(0,size));
+        return pg.getTotalPages();
     }
 
     @GetMapping("carrera/{carrera}")
@@ -77,13 +95,10 @@ public class CursoController {
                     c.setCode(curso.getCode());
                     c.setNombre(curso.getNombre());
                     c.setCreditos(curso.getCreditos());
-                    c.setMinCreditos(curso.getMinCreditos());
                     c.setUnidadAcademica(curso.getUnidadAcademica());
                     c.setUltimoCicloDictado(curso.getUltimoCicloDictado());
                     c.setLinkCurso(curso.getLinkCurso());
                     c.setPlanes(curso.getPlanes());
-                    c.setRequisitos(curso.getRequisitos());
-                    c.setRequeridoPor(curso.getRequeridoPor());
                     return cursoRepository.save(c);
                 })
                 .orElseThrow(()->
@@ -100,25 +115,5 @@ public class CursoController {
         cursoRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
-
-    @GetMapping("/{id}/requisitos")
-    public CollectionModel<EntityModel<CursoDTO>> getRequisitos(@PathVariable("id") Long id) throws ResourceNotFoundException{
-        Curso c = cursoRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("No se hallo el Curso "+id));
-        return cursoModelAssembler.toCollectionModel(c.getAllRequisitos());
-    }
-
-    @GetMapping("/{id}/requeridoPor")
-    public CollectionModel<EntityModel<CursoDTO>> getRequeridoPor(@PathVariable("id") Long id) throws ResourceNotFoundException{
-        Curso c = cursoRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("No se hallo el Curso "+id));
-        return cursoModelAssembler.toCollectionModel(c.getAllRequeridoPor());
-    }
-
-    //@GetMapping("/actualizarCursos")
-    //public List<Carrera> actualizarCursos(){
-      //  return lectorUrls.leer();
-    //}
 
 }

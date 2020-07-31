@@ -22,6 +22,7 @@ public class PlanDeEstudios {
     private Long id;
     @ManyToOne
     private Carrera carrera;
+
     private String cicloInicioPlan;
     private String cicloFinPlan;
     private int numElectivos;
@@ -29,7 +30,7 @@ public class PlanDeEstudios {
     private ETipoPlanEstudios tipoPlanEstudios;
     private boolean tieneTrabajoBachiller = false;
 
-    @OneToMany(mappedBy = "planDeEstudios", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "planDeEstudios", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CursoPlanDeEstudios> cursos;
 
     public PlanDeEstudios() {
@@ -113,15 +114,18 @@ public class PlanDeEstudios {
         this.cursos = cursos;
     }
 
-    public void imprimirCursos(){
-        System.out.println("Cursos de "+carrera.getNombre());
-        System.out.println("Plan de Estudios "+cicloFinPlan);
-        System.out.println("=============");
+    @Override
+    public String toString(){
+        StringBuilder c = new StringBuilder();
+        c.append("Cursos de ").append(carrera.getNombre());
+        c.append("Plan de Estudios ").append(cicloFinPlan);
         List<CursoPlanDeEstudios> _cursos = new ArrayList<>(cursos);
         _cursos.sort(CursoPlanDeEstudios::compararTipoCurso);
-        for(CursoPlanDeEstudios c: _cursos)
+        for(CursoPlanDeEstudios cur: _cursos)
         {
-            System.out.println(c);
+            c.append(cur.toString());
         }
+        return c.toString();
     }
+
 }

@@ -15,4 +15,9 @@ public interface CursoRepository extends JpaRepository<Curso, Long> {
             "where ?1 like p.carrera.nombre and e.planDeEstudios = p and e member of c.planes ")
     List<Curso> findByCarrera(String carrera);
 
+
+    @Query("select c from Curso c where ?1 = c.code ")
+    Curso findByCode(String code);
+
+
 }

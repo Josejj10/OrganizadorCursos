@@ -1,1 +1,1 @@
-export const CursosListURL = `http://localhost:8080/cursos`;
+export const CursosListURL = `http://localhost:8080/cursosBase/page/1/2`;

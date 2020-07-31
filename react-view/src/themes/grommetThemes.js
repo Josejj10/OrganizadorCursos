@@ -1,89 +1,119 @@
-import { hpe } from 'grommet-theme-hpe';
-
-const theme = {
+const regular = {
     global: {
+        active:{
+            background:{
+                back:'black',
+            }
+        },
         colors: {
-            'brand': '#f8f8f8',
-            'sunny': '#FFD602',
+            'lowContrast':'#707070',
+            'mediumContrast':'#3B3B3D',
+            'highContrast':'#1D1D1E',
+            'modal':'#EFE7E0',
+            'modalError':'#E77878',
+            'modalWarning':'#FADE8D',
+            'back':'#FEFBF8',
+            'error':'#E95656',
+            'warning':'#F8D05A',
+            'disabled':'#BFC7CB',
+            'link':'#23A6DF',
+            'b+2':'#286381',
+            'b+1':'#40809F',
+            'button':'#578CA6',
+            'b-1':'#79A3B7',
+            'b-2':'#96B7C7',
+
             'btnHover' : '#ededed',
-            'secondary':'#f5f5f5',
-            'back' : '#f0f0f0',
-            'frontBackground' : '#ffffff',
-            'strong' : '#000000',
+            'transp10': 'rgba(0, 0, 0, 0)',
             'focus': 'rgba(0, 0, 0, 0)',
-            'principal':'#1db6c4',
-            'bBody': '#AFAFAF',
-            'tHeaders': '#DADADA',
-            'light-red': 'rgba(255,105,97,0.52)',
         },
         font: {
-            family: 'Lato',
-            size: '14px',
-            height: '20px',
+            family: 'Heebo',
+            size: '26px',
+            color: 'mediumContrast'
+            //height: '20px',
         },
     },
     tab:{
-        active:{color:"principal"},
+        active:{color:"a"},
         border:{
             side:'bottom', size:'small',
-            color:'strong',
+            color:'b',
             hover:{
-                color:'principal',
+                color:'a',
             },
             active:{
-                color:'principal',
+                color:'a',
             }
         },
-        color:"strong",
-        hover:{ color: "principal"},
+        color:"b",
+        hover:{ color: "a"},
     },
     tabs:{
         header:{
             background:{
-                 color:'tHeaders',
+                 color:'a',
             }
         }
     }
 };
 
-const darkTheme = {
+const darkMode = {
     global: {
         colors: {
-            'brand': '#191919',
-            'sunny': '#FFD602',
-            'btnHover': '#333333',
-            'secondary':'#2B2B2B',
-            'back' : '#0f0f0f',
-            'frontBackground' : '#000000',
-            'strong' : '#ffffff',
-            'border': '#ffd036',
+            'lowContrast':'#707070',
+            'mediumContrast':'#3B3B3D',
+            'highContrast':'#1D1D1E',
+            'modal':'#EFE7E0',
+            'modalError':'#E77878',
+            'modalWarning':'#FADE8D',
+            'background':'#FEFBF8',
+            'error':'#E95656',
+            'warning':'#F8D05A',
+            'disabled':'#BFC7CB',
+            'link':'#23A6DF',
+            'b+2':'#286381',
+            'b+1':'#40809F',
+            'button':'#578CA6',
+            'b-1':'#79A3B7',
+            'b-2':'#96B7C7',
+
+            'btnHover' : '#ededed',
             'focus': 'rgba(0, 0, 0, 0)',
         },
         font: {
-            family: 'Lato',
-            size: '14px',
-            height: '20px',
+            family: 'Heebo',
+            size: '26px',
+            //height: '20px',
         },
     },
     tab:{
-        active:"#ffd036",
-        color:"#ffffff",
-        hover:{ color: "#ffd036"},
-
+        active:{color:"a"},
+        border:{
+            side:'bottom', size:'small',
+            color:'b',
+            hover:{
+                color:'a',
+            },
+            active:{
+                color:'a',
+            }
+        },
+        color:"b",
+        hover:{ color: "a"},
     },
     tabs:{
         header:{
-            border:{
-               // color:'#ffd036',
+            background:{
+                color:'a',
             }
         }
     }
 };
 
 const THEMES = {
-    theme,
-    hpe,
-    darkTheme
+    regular,
+    darkMode
 }
 
 

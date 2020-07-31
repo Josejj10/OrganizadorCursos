@@ -51,4 +51,12 @@ public class CursoPlanDeEstudiosKey implements Serializable {
     public int hashCode() {
         return Objects.hash(curso, planDeEstudios);
     }
+
+    @Override
+    public String toString() {
+        return "CursoPlanDeEstudiosKey{" +
+                "curso=" + curso +
+                ", planDeEstudios=" + planDeEstudios +
+                '}';
+    }
 }

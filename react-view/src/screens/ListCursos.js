@@ -16,13 +16,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 async function CursosDataService() {
     let res = await axios.get(`${CursosListURL}`);
     let data = res.data;
-    return data._embedded.cursoListaDTOList.map(
-        curso=>{
-            curso.nombre = curso.nombre? curso.nombre : "Por determinar";
-            curso.ciclo = curso.ciclo !== 20? curso.ciclo : "Electivo";
-            return curso;
-        }
-    );
+    return data._embedded.cursoListaDTOList;
 }
 
 
@@ -173,62 +167,94 @@ export class ListCursos extends React.Component {
                     openNew={this.loadOtroCurso}
                     key={this.id}
                 />}
+                {!this.state.cursosSv.length > 0 &&
+                <Box round={{size: "small"}}
+                     overflow='auto'
+                     background='modal'
+                    // margin='small'
+                     pad={"small"}
+                    // fill={"horizontal"}
+                     align='center'
+                    // appCentered = 'true'
+                     elevation={"large"}
+                >
+                    <Text textAlign={"center"} size='small'>Loading...</Text>
+                </Box>
+                }
                 <Box
                     round={{size: "small"}}
                     overflow='auto'
-                    background='frontBackground'
-                    // margin='small'
                     pad={"small"}
                     // fill={"horizontal"}
                     align='center'
                     // appCentered = 'true'
-                    elevation={'large'}
                 >
-                    {this.state.cursosSv.length ?
-                        <Box pad={"small"}>
-                            <Box margin={"small"} fill >
-                                <TextInput
-                                    placeholder={"Buscar"}
-                                    icon={<Search/>}
-                                    size={"medium"}
-                                    value={this.state.buscado}
-                                    onChange={event => this.searchCursos(event.target.value)}
-                                />
-                                {!this.state.cursosB.length?
-                                    <Box round={{size: "small"}} pad = {"xxsmall"}
-                                        margin={"small"} background={"light-red"} alignContent={"center"}
-                                         height={{max:"xsmall"}} overflow={"hidden"}
-                                    >
-                                        <Text textAlign={"center"} margin={"none"}  wordBreak={"break-all"}>
-                                            No se hallaron resultados para {this.state.buscado}</Text>
-                                    </Box>
-                                    :""
-                                }
-                            </Box>
-                                <DataTable
-                                    background={{
-                                        header: 'strong',
-                                        body: 'brand'
-                                    }}
-                                    border="bottom"
-                                    size="medium"
-                                    columns={this.groupColumns}
-                                    data={this.state.cursos}
-                                    sortable
-                                    primaryKey='id'
-                                    groupBy='ciclo'
-                                    sort={{direction: "asc", property: 'ciclo'}}
-                                />
-                                <Box margin={"medium"}>
-                                    <CSVLink data={this.state.csvData}
-                                             onClick={()=>this.calcularData()}>
-                                        Exportar Cursos Visibles
-                                    </CSVLink>
-
+                    {this.state.cursosSv.length > 0 &&
+                    <Box pad={"small"}>
+                        <Box> {/* Cursos, buscar, filtros, no se hallo*/}
+                            <Box // Cursos, Buscar
+                                margin={"small"}
+                                flex
+                                align={"center"}
+                                direction={"row"}
+                                pad={"medium"}
+                                style={{borderBottom:"2px solid "}}
+                            >
+                                <Text alignSelf={"end"}
+                                    margin={{right:"large"}} weight={"bold"} size={"xxlarge"}>
+                                    Cursos</Text>
+                                <Box background={"modal"}
+                                     flex
+                                     margin={{left:"large"}}
+                                     width={{max:"medium"}}
+                                >
+                                    <TextInput
+                                        placeholder={"Buscar curso por código o nombre"}
+                                        icon={<Search/>}
+                                        size={"medium"}
+                                        style={{background: "modal"}}
+                                        value={this.state.buscado}
+                                        onChange={event => this.searchCursos(event.target.value)}
+                                    />
                                 </Box>
+                            </Box>
+                            <Box // Filtros, no se encontro
+                                direction={"row"}
+                            >
+                            {!this.state.cursosB.length ?
+                                <Box round={{size: "small"}} pad={"xxsmall"}
+                                     margin={"small"} background={"light-red"} alignContent={"center"}
+                                     height={{max: "xsmall"}} overflow={"hidden"}
+                                >
+                                    <Text textAlign={"center"} margin={"none"} wordBreak={"break-all"}>
+                                        No se hallaron resultados para {this.state.buscado}</Text>
+                                </Box>
+                                : ""
+                            }
+                            </Box>
                         </Box>
-                        :
-                        <Text textAlign={"center"} size='small'>Loading...</Text>
+                        <DataTable
+                            background={{
+                                header: 'strong',
+                                body: 'brand'
+                            }}
+                            border="bottom"
+                            size="medium"
+                            columns={this.groupColumns}
+                            data={this.state.cursos}
+                            sortable
+                            primaryKey='id'
+                            groupBy='ciclo'
+                            sort={{direction: "asc", property: 'ciclo'}}
+                        />
+                        <Box margin={"medium"}>
+                            <CSVLink data={this.state.csvData}
+                                     onClick={() => this.calcularData()}>
+                                Exportar Cursos Visibles
+                            </CSVLink>
+
+                        </Box>
+                    </Box>
                     }
                 </Box>
             </Box>
